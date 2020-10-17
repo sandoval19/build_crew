@@ -1,6 +1,6 @@
 This project will contain the basic CRUD operations for the concept of a shop. 
 
-##To use this project:
+#To use this project:
 1. Clone the repository
 2. Create an environment
 3. Install the requirements.txt
