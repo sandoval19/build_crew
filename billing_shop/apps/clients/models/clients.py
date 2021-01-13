@@ -1,6 +1,8 @@
 from default.models.base_model import BaseModel
 from django.db import models
 import secrets
+import uuid
+import os
 
 
 def customer_image_file_path(instance, file_name):
