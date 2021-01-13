@@ -12,7 +12,7 @@ from apps.products.serializers.products_serializer import (
 
 class ProductsView(viewsets.GenericViewSet):
 
-    queryset = Products.objects.filter(is_active=True).order_by('-quantity')
+    queryset = Products.objects.all().order_by('-quantity')
 
     def get_serializer_class(self):
         if self.action == "partial_update":
@@ -20,7 +20,7 @@ class ProductsView(viewsets.GenericViewSet):
         return ProductsSerializer
 
     def list(self, request):
-        queryset = self.get_queryset()
+        queryset = Products.objects.filter(is_active=True).order_by('-quantity')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -38,7 +38,8 @@ class ProductsView(viewsets.GenericViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
-        model = get_object_or_404(self.get_queryset(), code=pk)
+        queryset = Products.objects.filter(is_active=True).order_by('-quantity')
+        model = get_object_or_404(queryset, code=pk)
         serializer = self.get_serializer(model, data=request.data, many=False)
         if serializer.is_valid():
             serializer.save()
@@ -48,7 +49,7 @@ class ProductsView(viewsets.GenericViewSet):
 
     def partial_update(self, request, pk=None):
         model = get_object_or_404(self.get_queryset(), code=pk)
-        serializer = self.get_serializer(model, data=request.data, many=False)
+        serializer = self.get_serializer(model, data=request.data, many=False, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
